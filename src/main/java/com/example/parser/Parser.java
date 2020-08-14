@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.List;
+import java.util.Scanner;
 
 public class Parser {
 
@@ -65,7 +66,7 @@ public class Parser {
         Class<?> clazz = getType(type);
         ObjectReader parser = getParser(encoding, clazz);
         String normalizedContent = normalizeContent(content);
-//        String collect = Pattern.compile("").splitAsStream(content).map(str -> str.replace("/n", ",")).collect(Collectors.joining(";"));
+        Scanner scanner = new Scanner(content);
 
         try {
             return  parser.readValues(normalizedContent).readAll();

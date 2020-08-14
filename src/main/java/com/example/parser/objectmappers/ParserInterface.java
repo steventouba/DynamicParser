@@ -3,10 +3,10 @@ package com.example.parser.objectmappers;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
-public interface ParserInterface {
+public abstract class ParserInterface {
 
-    ObjectWriter getWriter(Class<?> clazz);
+    public abstract ObjectWriter getWriter(Class<?> clazz);
 
-    ObjectReader getReader(Class<?> clazz);
+    public abstract ObjectReader getReader(Class<?> clazz);
 
 }

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @ParserObjectMapper(key = "csv")
-public class CsvMapper implements ParserInterface {
+public class CsvMapper extends ParserInterface {
 
     private final com.fasterxml.jackson.dataformat.csv.CsvMapper mapper;
 

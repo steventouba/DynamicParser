@@ -1,11 +1,16 @@
 package com.example.parser.types;
 
 import com.example.parser.annotations.ParserType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.Objects;
 
+import java.util.List;
+
 @ParserType(key = "employee-item")
-public class Employee {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Employee implements TypeInterface<Employee> {
     @JsonProperty("firstname")
     private String firstName;
 
@@ -85,5 +90,10 @@ public class Employee {
                 ", email='" + email + '\'' +
                 ", telephone='" + telephone + '\'' +
                 '}';
+    }
+
+    @Override
+    public TypeReference<List<Employee>> asTypeReference() {
+        return new TypeReference<>() {};
     }
 }

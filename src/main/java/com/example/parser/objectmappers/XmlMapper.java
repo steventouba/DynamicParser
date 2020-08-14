@@ -7,7 +7,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @ParserObjectMapper(key = "xml")
-public class XmlMapper implements ParserInterface {
+public class XmlMapper extends ParserInterface {
 
     private final com.fasterxml.jackson.dataformat.xml.XmlMapper mapper;
 

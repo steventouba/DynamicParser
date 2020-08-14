@@ -1,5 +1,9 @@
 package com.example.parser;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -33,7 +37,14 @@ public class Application {
                 Files.readString(Path.of("/Users/steventouba/Desktop/employees.jsonl"))
         );
 
-        objects.forEach(System.out::println);
+//        objects.forEach(System.out::println);
+        String json =  "<PhoneDetails><name>iPhone</name><displaySize>6.2</displaySize><memory>3/64 GB</memory></PhoneDetails><PhoneDetails><name>iPhone</name><displaySize>7.2</displaySize><memory>5/64 GB</memory></PhoneDetails>";
+//        String json = "[{ \"color\" : \"Black\", \"type\" : \"FIAT\" }]";
+        ObjectMapper objectMapper = new XmlMapper();
+        JsonNode jsonNode = objectMapper.readTree(json);
+        jsonNode.isArray();
+
+
     }
 }
 
@@ -43,4 +54,8 @@ public class Application {
 * use mapping for class to see if class exists
 * use private final static to start and see if it makes sense
 * make parse method static and constructor private
+*extend interface to return type refrence on objects List<t>
+or can read line by line and add to list
+* switch parse to input stream to read line by line
+* have class or something to take in arbitray information for csv to define parser configuration
 *  */

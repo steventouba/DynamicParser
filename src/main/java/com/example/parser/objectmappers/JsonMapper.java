@@ -8,7 +8,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @ParserObjectMapper(key = "json")
-public class JsonMapper implements ParserInterface {
+public class JsonMapper extends ParserInterface {
 
     private final ObjectMapper mapper;
 
@@ -27,4 +27,5 @@ public class JsonMapper implements ParserInterface {
     public ObjectReader getReader(Class<?> clazz) {
         return mapper.readerFor(clazz);
     }
+
 }
