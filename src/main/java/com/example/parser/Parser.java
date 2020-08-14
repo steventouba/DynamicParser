@@ -6,7 +6,7 @@ import com.example.parser.exceptions.EncodingMappingException;
 import com.example.parser.exceptions.ParseException;
 import com.example.parser.exceptions.TypeMappingException;
 import com.example.parser.objectmappers.ParserInterface;
-import com.fasterxml.jackson.databind.ObjectReader;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -14,11 +14,11 @@ import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.InputStream;
 import java.util.AbstractMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Optional;
 
 public class Parser {
 
@@ -60,48 +60,68 @@ public class Parser {
                     AbstractMap.SimpleImmutableEntry::getValue
             ));
 
-    private Parser() { }
+    private Parser() {}
 
-    public static List<Object> parse(String encoding, String type, String content) throws ParseException, FileNotFoundException {
-        Class<?> clazz = getType(type);
-        ObjectReader parser = getParser(encoding, clazz);
-        String normalizedContent = normalizeContent(content);
-        Scanner scanner = new Scanner(content);
-
-        try {
-            return  parser.readValues(normalizedContent).readAll();
-        } catch (IOException e) {
-           throw new ParseException(e.getMessage(), e);
-        }
+    public static List<Object> parse(String type, InputStream content) throws ParseException {
+        return parse(new Properties("json", type), content);
     }
 
-    private static ObjectReader getParser(String encoding, Class<?> clazz) throws ParseException {
+    public static List<Object> parseAsList(Properties properties, InputStream stream) throws ParseException {
 
-        encoding = encoding.toLowerCase().trim();
+        return ImmutableList.copyOf(getValues(properties, stream));
 
-        if (ENCODINGS.containsKey(encoding)) {
-            return ENCODINGS.get(encoding).getReader(clazz);
-        }
+    }
 
-        throw new EncodingMappingException(ENCODINGS.keySet());
+    public static Iterator<?> parse(Properties properties, InputStream stream) throws ParseException {
+
+        return getValues(properties, stream);
+
+    }
+
+    private static Iterator<?> getValues(Properties properties, InputStream stream) throws ParseException {
+
+        return Optional.ofNullable(ENCODINGS.get(properties.getEncoding()))
+                .orElseThrow(() -> new EncodingMappingException(ENCODINGS.keySet()))
+                .getReader(getType(properties.getType()), properties, stream);
+
     }
 
     private static Class<?> getType(String type) throws ParseException {
 
-        type = type.toLowerCase().trim();
-
-        if (TYPES.containsKey(type)) {
-            return TYPES.get(type);
-        }
-
-        throw new TypeMappingException(TYPES.keySet());
+        return Optional.ofNullable(TYPES.get(type))
+                .orElseThrow(() -> new TypeMappingException(TYPES.keySet()));
     }
 
+    @Deprecated
     private static String normalizeContent(String content) throws ParseException {
         if (content == null) { throw new ParseException("Content can't be null"); }
 
         if (content.isEmpty()) { throw new ParseException("Content can't be empty"); }
 
         return content;
+    }
+
+    public static class Properties {
+
+        private final String encoding;
+
+        private final String type;
+
+        public Properties(String encoding, String type) {
+            this.encoding = normalize(encoding);
+            this.type = normalize(type);
+        }
+
+        public String getEncoding() {
+            return encoding;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        private String normalize(String string) {
+            return string.trim().toLowerCase();
+        }
     }
 }

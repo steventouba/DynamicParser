@@ -33,8 +33,9 @@ public class Application {
 //        } catch (Exception e) {
 //            System.out.println("Error:" + e.getMessage());
 //        }
-        List<Object> objects = Parser.parse("json", "employee-item",
-                Files.readString(Path.of("/Users/steventouba/Desktop/employees.jsonl"))
+        List<Object> objects = Parser.parse(
+                new Parser.Properties("json","employee-item"),
+                Files.newInputStream(Path.of("/Users/steventouba/Desktop/employees.jsonl"))
         );
 
 //        objects.forEach(System.out::println);

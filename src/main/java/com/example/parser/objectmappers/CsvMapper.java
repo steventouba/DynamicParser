@@ -1,15 +1,20 @@
 package com.example.parser.objectmappers;
 
+import com.example.parser.Parser;
 import com.example.parser.annotations.ParserObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
+import com.example.parser.exceptions.ParseException;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+
 @ParserObjectMapper(key = "csv")
-public class CsvMapper extends ParserInterface {
+public class CsvMapper implements ParserInterface {
 
     private final com.fasterxml.jackson.dataformat.csv.CsvMapper mapper;
 
@@ -27,9 +32,12 @@ public class CsvMapper extends ParserInterface {
     }
 
     @Override
-    public ObjectReader getReader(Class<?> clazz) {
-
-        return mapper.readerFor(clazz).with(CsvSchema.emptySchema().withHeader());
+    public Iterator<?> getReader(Class<?> clazz, Parser.Properties properties, InputStream stream) throws ParseException {
+        try {
+            return mapper.readerFor(clazz).with(CsvSchema.emptySchema().withHeader()).readValues(stream);
+        } catch (IOException e) {
+            throw new ParseException(e);
+        }
     }
 
 
