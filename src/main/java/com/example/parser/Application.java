@@ -1,9 +1,5 @@
 package com.example.parser;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -35,15 +31,16 @@ public class Application {
 //        }
         List<Object> objects = Parser.parse(
                 new Parser.Properties("json","employee-item"),
-                Files.newInputStream(Path.of("/Users/steventouba/Desktop/employees.jsonl"))
+                Files.newInputStream(Path.of("/Users/steventouba/Desktop/employees.json"))
         );
+               objects .forEach(System.out::println);
 
-//        objects.forEach(System.out::println);
-        String json =  "<PhoneDetails><name>iPhone</name><displaySize>6.2</displaySize><memory>3/64 GB</memory></PhoneDetails><PhoneDetails><name>iPhone</name><displaySize>7.2</displaySize><memory>5/64 GB</memory></PhoneDetails>";
-//        String json = "[{ \"color\" : \"Black\", \"type\" : \"FIAT\" }]";
-        ObjectMapper objectMapper = new XmlMapper();
-        JsonNode jsonNode = objectMapper.readTree(json);
-        jsonNode.isArray();
+////        objects.forEach(System.out::println);
+//        String json =  "<PhoneDetails><name>iPhone</name><displaySize>6.2</displaySize><memory>3/64 GB</memory></PhoneDetails><PhoneDetails><name>iPhone</name><displaySize>7.2</displaySize><memory>5/64 GB</memory></PhoneDetails>";
+////        String json = "[{ \"color\" : \"Black\", \"type\" : \"FIAT\" }]";
+//        ObjectMapper objectMapper = new XmlMapper();
+//        JsonNode jsonNode = objectMapper.readTree(json);
+//        jsonNode.isArray();
 
 
     }

@@ -62,17 +62,17 @@ public class Parser {
 
     private Parser() {}
 
-    public static List<Object> parse(String type, InputStream content) throws ParseException {
-        return parse(new Properties("json", type), content);
-    }
+//    public static List<Object> parse(String type, InputStream content) throws ParseException {
+//        return parse(new Properties("json", type), content);
+//    }
 
-    public static List<Object> parseAsList(Properties properties, InputStream stream) throws ParseException {
+    public static List<Object> parse(Properties properties, InputStream stream) throws ParseException {
 
         return ImmutableList.copyOf(getValues(properties, stream));
 
     }
 
-    public static Iterator<?> parse(Properties properties, InputStream stream) throws ParseException {
+    public static Iterator<?> parseAsIterator(Properties properties, InputStream stream) throws ParseException {
 
         return getValues(properties, stream);
 

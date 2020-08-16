@@ -2,14 +2,16 @@ package com.example.parser.types;
 
 import com.example.parser.annotations.ParserType;
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.Objects;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @ParserType(key = "sales-item")
 @JsonIgnoreProperties(ignoreUnknown = true)
 //@JsonPropertyOrder(alphabetic = true)
-public class SalesItem {
+public class SalesItem implements TypeInterface {
     @JsonProperty("Transaction_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "M/d/u H:m")
     private final LocalDateTime transactionDate;
@@ -68,5 +70,10 @@ public class SalesItem {
                 ", product='" + product + '\'' +
                 ", price='" + price + '\'' +
                 '}';
+    }
+
+    @Override
+    public TypeReference<List<SalesItem>> asTypeReference() {
+        return new TypeReference<>() {};
     }
 }

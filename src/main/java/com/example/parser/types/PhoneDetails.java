@@ -4,11 +4,14 @@ package com.example.parser.types;
 import com.example.parser.annotations.ParserType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.Objects;
+
+import java.util.List;
 
 @ParserType(key = "phone-item")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PhoneDetails {
+public class PhoneDetails implements TypeInterface {
     @JsonProperty
     private String name;
 
@@ -43,4 +46,10 @@ public class PhoneDetails {
                 ", memory='" + memory + '\'' +
                 '}';
     }
+
+    @Override
+    public TypeReference<List<PhoneDetails>> asTypeReference(){
+        return new TypeReference<>() {};
+    }
+
 }
